@@ -27,7 +27,6 @@ public class Alerta {
 
     private String mensagem;
     private LocalDateTime dataHora;
-    private Boolean isAlertaAtivo;
 
 
     public Long getId() {
@@ -70,13 +69,6 @@ public class Alerta {
         this.dataHora = dataHora;
     }
 
-    public Boolean getAlertaAtivo() {
-        return isAlertaAtivo;
-    }
-
-    public void setAlertaAtivo(Boolean alertaAtivo) {
-        isAlertaAtivo = alertaAtivo;
-    }
 
     public Ocupacao getOcupacao() {
         return ocupacao;
