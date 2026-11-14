@@ -5,10 +5,11 @@ import br.com.fiap.fluxo.entity.Ocupacao;
 import br.com.fiap.fluxo.enums.NivelAlerta;
 import br.com.fiap.fluxo.repository.AlertaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Repository
+@Service
 public class AlertaService {
 
     private final AlertaRepository alertaRepository;
