@@ -2,6 +2,7 @@ package br.com.fiap.fluxo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,7 +19,7 @@ public class Linha {
             joinColumns = @JoinColumn(name = "linha_id"),
             inverseJoinColumns = @JoinColumn(name = "estacao_id")
     )
-    private List<Estacao> estacoes;
+    private List<Estacao> estacoes = new ArrayList<>();
 
     private String nome;
     private int codigo;

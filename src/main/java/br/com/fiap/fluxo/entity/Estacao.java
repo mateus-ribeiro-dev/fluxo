@@ -2,6 +2,7 @@ package br.com.fiap.fluxo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,13 +19,13 @@ public class Estacao {
     private Boolean isEstacaoAtiva;
 
     @ManyToMany(mappedBy = "estacoes")
-    private List<Linha> linhas;
+    private List<Linha> linhas = new ArrayList<>();
 
     @OneToMany(mappedBy = "estacao")
-    private List<Ocupacao> ocupacoes;
+    private List<Ocupacao> ocupacoes = new ArrayList<>();
 
     @OneToMany(mappedBy = "estacao")
-    private List<Alerta> alertas;
+    private List<Alerta> alertas = new ArrayList<>();
 
     public Long getId() {
         return id;
