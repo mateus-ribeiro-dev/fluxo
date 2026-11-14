@@ -21,6 +21,10 @@ public class Alerta {
     @Enumerated(EnumType.STRING)
     private NivelAlerta nivelAlerta;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ocupacao_id", nullable = false)
+    private Ocupacao ocupacao;
+
     private String mensagem;
     private LocalDateTime dataHora;
     private Boolean isAlertaAtivo;
@@ -72,5 +76,13 @@ public class Alerta {
 
     public void setAlertaAtivo(Boolean alertaAtivo) {
         isAlertaAtivo = alertaAtivo;
+    }
+
+    public Ocupacao getOcupacao() {
+        return ocupacao;
+    }
+
+    public void setOcupacao(Ocupacao ocupacao) {
+        this.ocupacao = ocupacao;
     }
 }

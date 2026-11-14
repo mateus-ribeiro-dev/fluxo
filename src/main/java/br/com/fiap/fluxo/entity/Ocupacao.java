@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Ocupacao {
@@ -18,6 +19,8 @@ public class Ocupacao {
     @JoinColumn(name = "estacao_id", nullable = false)
     private Estacao estacao;
 
+    @OneToMany(mappedBy = "ocupacao")
+    private List<Alerta> alertas;
 
     private int entradas;
     private int saidas;
@@ -79,5 +82,13 @@ public class Ocupacao {
 
     public void setDataHora(LocalDateTime dataHora) {
         this.dataHora = dataHora;
+    }
+
+    public List<Alerta> getAlertas() {
+        return alertas;
+    }
+
+    public void setAlertas(List<Alerta> alertas) {
+        this.alertas = alertas;
     }
 }
