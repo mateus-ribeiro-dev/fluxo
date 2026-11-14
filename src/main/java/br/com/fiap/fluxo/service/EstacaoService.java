@@ -2,13 +2,13 @@ package br.com.fiap.fluxo.service;
 
 import br.com.fiap.fluxo.dto.request.EstacaoRequest;
 import br.com.fiap.fluxo.dto.response.EstacaoResponse;
-import br.com.fiap.fluxo.dto.response.LinhaResponse;
 import br.com.fiap.fluxo.entity.Estacao;
 import br.com.fiap.fluxo.entity.Linha;
 import br.com.fiap.fluxo.exception.EstacaoInexistenteException;
 import br.com.fiap.fluxo.exception.LinhaInexistenteException;
 import br.com.fiap.fluxo.repository.EstacaoRepository;
 import br.com.fiap.fluxo.repository.LinhaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,7 @@ public class EstacaoService {
         this.linhaRepository = linhaRepository;
     }
 
+    @Transactional
     public EstacaoResponse cadastrar(EstacaoRequest estacaoRequest) {
         Estacao estacao = estacaoRequest.toEntity();
 

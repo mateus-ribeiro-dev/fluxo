@@ -23,6 +23,7 @@ public class LinhaService {
         this.linhaRepository = linhaRepository;
     }
 
+    @Transactional
     public LinhaResponse cadastrar(LinhaRequest linhaRequest) {
         Linha novaLinha = linhaRequest.toEntity();
         Linha salva = linhaRepository.save(novaLinha);
