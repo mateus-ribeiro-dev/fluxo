@@ -49,17 +49,9 @@ public class EstacaoService {
         return EstacaoResponse.from(novaEstacao);
     }
 
-    public List<EstacaoResponse> listar(Pageable pageable) {
-        List<EstacaoResponse> estacoesResponse = new ArrayList<>();
-
-        Page<Estacao> estacoesCadastradas = estacaoRepository.findAll(pageable);
-
-        for (Estacao estacaoCadastrada : estacoesCadastradas) {
-            EstacaoResponse estacaoResponse = EstacaoResponse.from(estacaoCadastrada);
-            estacoesResponse.add(estacaoResponse);
-        }
-
-        return estacoesResponse;
+    public Page<EstacaoResponse> listar(Pageable pageable) {
+        return estacaoRepository.findAll(pageable)
+                .map(EstacaoResponse::from);
     }
 
     public EstacaoResponse consultarPorId(Long id) {

@@ -31,17 +31,9 @@ public class LinhaService {
         return LinhaResponse.from(salva);
     }
 
-    public List<LinhaResponse> listar(Pageable pageable) {
-        List<LinhaResponse> linhasResponse = new ArrayList<>();
-
-        Page<Linha> linhasCadastradas = linhaRepository.findAll(pageable);
-
-        for (Linha linhaCadastrada : linhasCadastradas) {
-            LinhaResponse linhaResponse = LinhaResponse.from(linhaCadastrada);
-            linhasResponse.add(linhaResponse);
-        }
-
-        return linhasResponse;
+    public Page<LinhaResponse> listar(Pageable pageable) {
+        return linhaRepository.findAll(pageable)
+                .map(LinhaResponse::from);
     }
 
     public LinhaResponse consultarPorId(Long id) {

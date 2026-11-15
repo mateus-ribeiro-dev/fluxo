@@ -1,6 +1,7 @@
 package br.com.fiap.fluxo.service;
 
 import br.com.fiap.fluxo.dto.request.OcupacaoRequest;
+import br.com.fiap.fluxo.dto.response.EstacaoResponse;
 import br.com.fiap.fluxo.dto.response.OcupacaoResponse;
 import br.com.fiap.fluxo.entity.Estacao;
 import br.com.fiap.fluxo.entity.Ocupacao;
@@ -55,7 +56,7 @@ public class OcupacaoService {
             throw new RuntimeException("Ocupação inválida");
         }
 
-        double percentual = novaOcupacao * 100 / estacao.getCapacidadeMaxima();
+        double percentual = novaOcupacao * 100.0 / estacao.getCapacidadeMaxima();
 
         Ocupacao ocupacao = request.toEntity();
 
@@ -71,17 +72,9 @@ public class OcupacaoService {
         return OcupacaoResponse.from(novaMedicao);
     }
 
-    public List<OcupacaoResponse> listar(Pageable pageable) {
-        List<OcupacaoResponse> ocupacoesResponse = new ArrayList<>();
-
-        Page<Ocupacao> ocupacoesCadastradas = ocupacaoRepository.findAll(pageable);
-
-        for (Ocupacao ocupacaoCadastrada : ocupacoesCadastradas) {
-            OcupacaoResponse ocupacaoResponse = OcupacaoResponse.from(ocupacaoCadastrada);
-            ocupacoesResponse.add(ocupacaoResponse);
-        }
-
-        return ocupacoesResponse;
+    public Page<OcupacaoResponse> listar(Pageable pageable) {
+        return ocupacaoRepository.findAll(pageable)
+                .map(OcupacaoResponse::from);
     }
 
 }
