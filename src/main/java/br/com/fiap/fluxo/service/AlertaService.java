@@ -1,11 +1,15 @@
 package br.com.fiap.fluxo.service;
 
+import br.com.fiap.fluxo.dto.response.AlertaResponse;
 import br.com.fiap.fluxo.entity.Alerta;
 import br.com.fiap.fluxo.entity.Ocupacao;
 import br.com.fiap.fluxo.enums.NivelAlerta;
+import br.com.fiap.fluxo.exception.AlertaInexistenteException;
 import br.com.fiap.fluxo.repository.AlertaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -42,5 +46,19 @@ public class AlertaService {
         alerta.setDataHora(LocalDateTime.now());
 
         alertaRepository.save(alerta);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AlertaResponse> listar(Pageable pageable) {
+        return alertaRepository.findAll(pageable)
+                .map(AlertaResponse::from);
+    }
+
+    @Transactional(readOnly = true)
+    public AlertaResponse consultarPorId(Long id) {
+        Alerta alerta = alertaRepository.findById(id)
+                .orElseThrow(() -> new AlertaInexistenteException("Alerta não encontrado: " + id));
+
+        return AlertaResponse.from(alerta);
     }
 }
