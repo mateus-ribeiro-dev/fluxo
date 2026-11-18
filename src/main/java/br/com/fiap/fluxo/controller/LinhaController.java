@@ -6,6 +6,7 @@ import br.com.fiap.fluxo.service.LinhaService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
@@ -35,4 +36,17 @@ public class LinhaController {
     public LinhaResponse consultarPorId(@PathVariable Long id) {
         return service.consultarPorId(id);
     }
+
+    @PutMapping(path = "/{linhaId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LinhaResponse> atualizar(@PathVariable Long linhaId, @Valid @RequestBody LinhaRequest linha) {
+        LinhaResponse linhaResponse = service.atualizar(linhaId, linha);
+        return ResponseEntity.ok(linhaResponse);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
+        service.remover(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
