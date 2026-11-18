@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,4 +60,65 @@ public class EstacaoService {
         }
         throw new EstacaoInexistenteException("Estação não encontrada: "+ id);
     }
+
+    public EstacaoResponse atualizar(Long estacaoId, EstacaoRequest request) {
+        Optional<Estacao> retornoConsulta = estacaoRepository.findById(estacaoId);
+        if (retornoConsulta.isEmpty()) {
+            throw new EstacaoInexistenteException("Estação não encontrada: " + estacaoId);
+        }
+
+        Estacao estacaoCadastrada = retornoConsulta.get();
+
+        List<Linha> novasLinhas = linhaRepository.findAllById(request.linhasIds());
+
+        if (novasLinhas.size() != request.linhasIds().size()) {
+            throw new LinhaInexistenteException( "Uma ou mais linhas não foram encontradas");
+        }
+
+        estacaoCadastrada.setNome(request.nome());
+        estacaoCadastrada.setLocalizacao(request.localizacao());
+        estacaoCadastrada.setCapacidadeMaxima(request.capacidadeMaxima());
+        estacaoCadastrada.setEstacaoAtiva(request.ativa());
+
+        // Remove os relacionamentos anteriores
+        for (Linha linha : estacaoCadastrada.getLinhas()) {
+            linha.getEstacoes().remove(estacaoCadastrada);
+        }
+
+        // Atualiza os relacionamentos
+        estacaoCadastrada.getLinhas().clear();
+        estacaoCadastrada.getLinhas().addAll(novasLinhas);
+
+        for (Linha linha : novasLinhas) {
+            if (!linha.getEstacoes().contains(estacaoCadastrada)) {
+                linha.getEstacoes().add(estacaoCadastrada);
+            }
+        }
+
+        Estacao estacaoAtualizada = estacaoRepository.save(estacaoCadastrada);
+
+        return EstacaoResponse.from(estacaoAtualizada);
+    }
+
+    public void remover(Long estacaoId) {
+        Optional<Estacao> retornoConsulta = estacaoRepository.findById(estacaoId);
+        if (retornoConsulta.isEmpty()) {
+            throw new EstacaoInexistenteException("Estação não encontrada: " + estacaoId);
+        }
+
+        Estacao estacao = estacaoRepository.findById(estacaoId).orElseThrow(() ->
+                        new EstacaoInexistenteException("Estação não encontrada: " + estacaoId));
+
+        if (!estacao.getOcupacoes().isEmpty() || !estacao.getAlertas().isEmpty()) {
+            throw new IllegalStateException("Não é possível excluir uma estação com histórico de ocupações ou alertas");
+        }
+
+        for (Linha linha : estacao.getLinhas()) {
+            linha.getEstacoes().remove(estacao);
+        }
+
+        estacaoRepository.delete(estacao);
+    }
+
+
 }
