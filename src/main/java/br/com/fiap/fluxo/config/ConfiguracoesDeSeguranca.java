@@ -188,6 +188,18 @@ public class ConfiguracoesDeSeguranca {
                                 Roles.OPERADOR.name()
                         )
 
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/linhas/**",
+                                "/estacoes/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/linhas/**",
+                                "/estacoes/**"
+                        ).hasRole("ADMIN")
+
                         // Demais endpoints bloqueados
                         .anyRequest().denyAll()
                 )
