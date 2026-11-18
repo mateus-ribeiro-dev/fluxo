@@ -37,15 +37,15 @@ public class EstacaoController {
     }
 
 
-    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{estacaoId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EstacaoResponse> atualizar(@PathVariable Long estacaoId, @Valid @RequestBody EstacaoRequest request) {
         EstacaoResponse EstacaoResponse = service.atualizar(estacaoId, request);
         return ResponseEntity.ok(EstacaoResponse);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> remover(@PathVariable Long EstacaoId) {
-        service.remover(EstacaoId);
+    @DeleteMapping(path = "/{estacaoId}")
+    public ResponseEntity<Void> remover(@PathVariable Long estacaoId) {
+        service.remover(estacaoId);
         return ResponseEntity.noContent().build();
     }
 
