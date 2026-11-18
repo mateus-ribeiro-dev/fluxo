@@ -10,9 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,4 +40,34 @@ public class LinhaService {
         }
         throw new LinhaInexistenteException("Linha não encontrada: "+ id);
     }
+
+    public LinhaResponse atualizar(Long linhaId, LinhaRequest request) {
+        Optional<Linha> retornoConsulta = linhaRepository.findById(linhaId);
+
+        if (retornoConsulta.isEmpty()) {
+            throw new LinhaInexistenteException("Linha não encontrada: " + linhaId);
+        }
+
+        Linha linhaCadastrada = retornoConsulta.get();
+
+        linhaCadastrada.setNome(request.nome());
+        linhaCadastrada.setCodigo(request.codigo());
+        linhaCadastrada.setCor(request.cor());
+        linhaCadastrada.setLinhaAtiva(request.ativa());
+
+        Linha linhaAtualizada = linhaRepository.save(linhaCadastrada);
+
+        return LinhaResponse.from(linhaAtualizada);
+    }
+
+    public void remover(Long linhaId) {
+            Optional<Linha> retornoConsulta = linhaRepository.findById(linhaId);
+            if (retornoConsulta.isEmpty()) {
+                throw new LinhaInexistenteException("Linha não encontrada: " + linhaId);
+            }
+
+            linhaRepository.deleteById(linhaId);
+    }
+
+
 }
