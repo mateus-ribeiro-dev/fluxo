@@ -137,6 +137,7 @@ public class ConfiguracoesDeSeguranca {
             JwtAuthenticationConverter jwtAuthenticationConverter) {
 
         return http
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session ->
