@@ -49,4 +49,17 @@ public class EstacaoController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping(path = "/filtrar", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<EstacaoResponse>> filtrar(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String localizacao,
+            @RequestParam(required = false) Boolean ativa,
+            @RequestParam(required = false) Integer capacidadeMinima,
+            Pageable pageable) {
+
+        Page<EstacaoResponse> estacoes = service.filtrar(nome, localizacao, ativa, capacidadeMinima, pageable);
+
+        return ResponseEntity.ok(estacoes);
+    }
+
 }

@@ -8,9 +8,11 @@ import br.com.fiap.fluxo.exception.EstacaoInexistenteException;
 import br.com.fiap.fluxo.exception.LinhaInexistenteException;
 import br.com.fiap.fluxo.repository.EstacaoRepository;
 import br.com.fiap.fluxo.repository.LinhaRepository;
+import br.com.fiap.fluxo.specification.EstacaoSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -118,6 +120,29 @@ public class EstacaoService {
         }
 
         estacaoRepository.delete(estacao);
+    }
+
+    public Page<EstacaoResponse> filtrar(String nome, String localizacao, Boolean ativa, Integer capacidadeMinima, Pageable pageable) {
+
+        Specification<Estacao> specification = Specification.unrestricted();
+
+        if (nome != null && !nome.isBlank()) {
+            specification = specification.and(EstacaoSpecification.nome(nome));
+        }
+
+        if (localizacao != null && !localizacao.isBlank()) {
+            specification = specification.and(EstacaoSpecification.localizacao(localizacao));
+        }
+
+        if (ativa != null) {
+            specification = specification.and(EstacaoSpecification.ativa(ativa));
+        }
+
+        if (capacidadeMinima != null) {
+            specification = specification.and(EstacaoSpecification.capacidadeMinima(capacidadeMinima));
+        }
+
+        return estacaoRepository.findAll(specification, pageable).map(EstacaoResponse::from);
     }
 
 
