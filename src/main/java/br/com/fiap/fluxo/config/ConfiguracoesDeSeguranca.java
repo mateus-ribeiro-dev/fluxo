@@ -200,6 +200,9 @@ public class ConfiguracoesDeSeguranca {
                                 "/estacoes/**"
                         ).hasRole("ADMIN")
 
+                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/actuator/**").hasRole(Roles.ADMIN.name())
+
                         // Demais endpoints bloqueados
                         .anyRequest().denyAll()
                 )
