@@ -10,6 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import org.springframework.hateoas.MediaTypes;
+
 
 @RestController
 @RequestMapping("/linhas")
@@ -32,9 +37,17 @@ public class LinhaController {
         return service.listar(pageable);
     }
 
-    @GetMapping("/{id}")
-    public LinhaResponse consultarPorId(@PathVariable Long id) {
-        return service.consultarPorId(id);
+    @GetMapping(path = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<EntityModel<LinhaResponse>> consultarPorId(@PathVariable("id") Long linhaId) {
+        LinhaResponse response = service.consultarPorId(linhaId);
+
+        EntityModel<LinhaResponse> model = EntityModel.of(response);
+
+        model.add(linkTo(methodOn(LinhaController.class).consultarPorId(linhaId)).withSelfRel());
+        model.add(linkTo(LinhaController.class).withRel("linhas"));
+        model.add(linkTo(EstacaoController.class).withRel("estacoes"));
+
+        return ResponseEntity.ok(model);
     }
 
     @PutMapping(path = "/{linhaId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

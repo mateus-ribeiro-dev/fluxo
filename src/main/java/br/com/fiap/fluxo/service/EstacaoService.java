@@ -58,7 +58,7 @@ public class EstacaoService {
                 .map(EstacaoResponse::from);
     }
 
-    @Cacheable(value = "estacoes", key = "#estacaoId")
+    @Cacheable(value = "estacoes", key = "#id")
     public EstacaoResponse consultarPorId(Long id) {
         Optional<Estacao> estacaoCadastrada = estacaoRepository.findById(id);
         if (estacaoCadastrada.isPresent()) {

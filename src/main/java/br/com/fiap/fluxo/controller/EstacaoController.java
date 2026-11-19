@@ -10,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.hateoas.EntityModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import org.springframework.hateoas.MediaTypes;
 
 @RestController
 @RequestMapping("/estacoes")
@@ -31,9 +35,19 @@ public class EstacaoController {
         return service.listar(pageable);
     }
 
-    @GetMapping("/{id}")
-    public EstacaoResponse consultarPorId(@PathVariable Long id) {
-        return service.consultarPorId(id);
+    @GetMapping(path = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<EntityModel<EstacaoResponse>> consultarPorId(@PathVariable("id") Long estacaoId) {
+        EstacaoResponse response = service.consultarPorId(estacaoId);
+
+        EntityModel<EstacaoResponse> model = EntityModel.of(response);
+
+        model.add(linkTo(methodOn(EstacaoController.class).consultarPorId(estacaoId)).withSelfRel());
+        model.add(linkTo(EstacaoController.class).withRel("estacoes"));
+        model.add(linkTo(LinhaController.class).withRel("linhas"));
+        model.add(linkTo(OcupacaoController.class).slash("estacao").slash(estacaoId).withRel("ocupacoes"));
+        model.add(linkTo(AlertaController.class).slash("estacao").slash(estacaoId).withRel("alertas"));
+
+        return ResponseEntity.ok(model);
     }
 
 

@@ -36,7 +36,7 @@ public class LinhaService {
                 .map(LinhaResponse::from);
     }
 
-    @Cacheable(value = "linhas", key = "#linhaId")
+    @Cacheable(value = "linhas", key = "#id")
     public LinhaResponse consultarPorId(Long id) {
         Optional<Linha> linhaCadastrada = linhaRepository.findById(id);
         if (linhaCadastrada.isPresent()) {
