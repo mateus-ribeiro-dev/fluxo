@@ -28,6 +28,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import jakarta.servlet.DispatcherType;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -147,6 +148,8 @@ public class ConfiguracoesDeSeguranca {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
 
                         // Swagger
                         .requestMatchers(

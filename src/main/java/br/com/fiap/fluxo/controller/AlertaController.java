@@ -5,10 +5,13 @@ import br.com.fiap.fluxo.enums.NivelAlerta;
 import br.com.fiap.fluxo.service.AlertaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springdoc.core.annotations.ParameterObject;
 
 @RestController
 @RequestMapping("/alertas")
@@ -20,9 +23,10 @@ public class AlertaController {
         this.service = service;
     }
 
-    @GetMapping
-    public Page<AlertaResponse> listar(Pageable pageable) {
-        return service.listar(pageable);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<AlertaResponse>> listar(@ParameterObject Pageable pageable) {
+        Page<AlertaResponse> alertas = service.listar(pageable);
+        return ResponseEntity.ok(alertas);
     }
 
     @GetMapping("/{id}")

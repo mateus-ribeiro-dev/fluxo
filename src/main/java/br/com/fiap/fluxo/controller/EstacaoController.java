@@ -14,6 +14,7 @@ import org.springframework.hateoas.EntityModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.hateoas.MediaTypes;
+import org.springdoc.core.annotations.ParameterObject;
 
 @RestController
 @RequestMapping("/estacoes")
@@ -30,9 +31,10 @@ public class EstacaoController {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(estacaoResponse);
     }
 
-    @GetMapping
-    public Page<EstacaoResponse> listar(Pageable pageable) {
-        return service.listar(pageable);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<EstacaoResponse>> listar(@ParameterObject Pageable pageable) {
+        Page<EstacaoResponse> estacoes = service.listar(pageable);
+        return ResponseEntity.ok(estacoes);
     }
 
     @GetMapping(path = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)

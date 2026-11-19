@@ -7,9 +7,11 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
+import org.springdoc.core.annotations.ParameterObject;
 
 import java.time.LocalDateTime;
 
@@ -29,9 +31,10 @@ public class OcupacaoController {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(ocupacaoResponse);
     }
 
-    @GetMapping
-    public Page<OcupacaoResponse> listar(Pageable pageable) {
-        return service.listar(pageable);
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<OcupacaoResponse>> listar(@ParameterObject Pageable pageable) {
+        Page<OcupacaoResponse> ocupacoes = service.listar(pageable);
+        return ResponseEntity.ok(ocupacoes);
     }
 
     @GetMapping("/estacao/{estacaoId}")
