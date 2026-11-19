@@ -15,6 +15,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.hateoas.MediaTypes;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 
 @RestController
@@ -34,8 +36,14 @@ public class LinhaController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<LinhaResponse>> listar(@ParameterObject Pageable pageable) {
+    public ResponseEntity<Page<LinhaResponse>> listar(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
         Page<LinhaResponse> linhas = service.listar(pageable);
+
         return ResponseEntity.ok(linhas);
     }
 
