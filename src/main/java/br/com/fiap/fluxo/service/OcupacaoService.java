@@ -81,4 +81,9 @@ public class OcupacaoService {
         return ocupacaoRepository .findByEstacaoId(estacaoId, pageable).map(OcupacaoResponse::from);
     }
 
+    @Transactional(readOnly = true)
+    public Page<OcupacaoResponse> consultarPorPeriodo(Long estacaoId, LocalDateTime inicio, LocalDateTime fim, Pageable pageable) {
+        return ocupacaoRepository.buscarPorPeriodo(estacaoId, inicio, fim, pageable).map(OcupacaoResponse::from);
+    }
+
 }
