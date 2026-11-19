@@ -1,6 +1,7 @@
 package br.com.fiap.fluxo.controller;
 
 import br.com.fiap.fluxo.dto.response.AlertaResponse;
+import br.com.fiap.fluxo.enums.NivelAlerta;
 import br.com.fiap.fluxo.service.AlertaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,5 +28,15 @@ public class AlertaController {
     @GetMapping("/{id}")
     public AlertaResponse consultarPorId(@PathVariable Long id) {
         return service.consultarPorId(id);
+    }
+
+    @GetMapping("/nivel/{nivelAlerta}")
+    public Page<AlertaResponse> consultarPorNivel(@PathVariable("nivelAlerta") NivelAlerta nivelAlerta,Pageable pageable) {
+        return service.consultarPorNivel(nivelAlerta, pageable);
+    }
+
+    @GetMapping("/estacao/{estacaoId}")
+    public Page<AlertaResponse> consultarPorEstacao(@PathVariable("estacaoId") Long estacaoId,Pageable pageable) {
+        return service.consultarPorEstacao(estacaoId, pageable);
     }
 }

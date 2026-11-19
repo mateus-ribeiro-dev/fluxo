@@ -61,4 +61,14 @@ public class AlertaService {
 
         return AlertaResponse.from(alerta);
     }
+
+    @Transactional(readOnly = true)
+    public Page<AlertaResponse> consultarPorNivel(NivelAlerta nivelAlerta, Pageable pageable) {
+        return alertaRepository.findByNivelAlerta(nivelAlerta, pageable).map(AlertaResponse::from);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AlertaResponse> consultarPorEstacao(Long estacaoId, Pageable pageable) {
+        return alertaRepository.findByEstacaoId(estacaoId, pageable).map(AlertaResponse::from);
+    }
 }
