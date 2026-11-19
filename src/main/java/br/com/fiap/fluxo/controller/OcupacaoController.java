@@ -30,4 +30,9 @@ public class OcupacaoController {
     public Page<OcupacaoResponse> listar(Pageable pageable) {
         return service.listar(pageable);
     }
+
+    @GetMapping("/estacao/{estacaoId}")
+    public Page<OcupacaoResponse> consultarPorEstacao(@PathVariable("estacaoId") Long estacaoId,Pageable pageable) {
+        return service.consultarPorEstacao(estacaoId, pageable);
+    }
 }

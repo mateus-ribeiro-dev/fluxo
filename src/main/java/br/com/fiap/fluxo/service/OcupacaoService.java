@@ -77,4 +77,8 @@ public class OcupacaoService {
                 .map(OcupacaoResponse::from);
     }
 
+    public Page<OcupacaoResponse> consultarPorEstacao( Long estacaoId, Pageable pageable) {
+        return ocupacaoRepository .findByEstacaoId(estacaoId, pageable).map(OcupacaoResponse::from);
+    }
+
 }
