@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.Optional;
 
@@ -20,6 +22,7 @@ public class LinhaService {
         this.linhaRepository = linhaRepository;
     }
 
+    @CacheEvict(value = {"linhas", "estacoes"}, allEntries = true)
     @Transactional
     public LinhaResponse cadastrar(LinhaRequest linhaRequest) {
         Linha novaLinha = linhaRequest.toEntity();
@@ -33,6 +36,7 @@ public class LinhaService {
                 .map(LinhaResponse::from);
     }
 
+    @Cacheable(value = "linhas", key = "#linhaId")
     public LinhaResponse consultarPorId(Long id) {
         Optional<Linha> linhaCadastrada = linhaRepository.findById(id);
         if (linhaCadastrada.isPresent()) {
@@ -41,6 +45,7 @@ public class LinhaService {
         throw new LinhaInexistenteException("Linha não encontrada: "+ id);
     }
 
+    @CacheEvict(value = {"linhas", "estacoes"}, allEntries = true)
     public LinhaResponse atualizar(Long linhaId, LinhaRequest request) {
         Optional<Linha> retornoConsulta = linhaRepository.findById(linhaId);
 
@@ -60,6 +65,7 @@ public class LinhaService {
         return LinhaResponse.from(linhaAtualizada);
     }
 
+    @CacheEvict(value = {"linhas", "estacoes"}, allEntries = true)
     public void remover(Long linhaId) {
             Optional<Linha> retornoConsulta = linhaRepository.findById(linhaId);
             if (retornoConsulta.isEmpty()) {

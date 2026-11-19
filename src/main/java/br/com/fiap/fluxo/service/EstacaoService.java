@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,7 @@ public class EstacaoService {
         this.linhaRepository = linhaRepository;
     }
 
+    @CacheEvict(value = {"linhas", "estacoes"}, allEntries = true)
     @Transactional
     public EstacaoResponse cadastrar(EstacaoRequest estacaoRequest) {
         Estacao estacao = estacaoRequest.toEntity();
@@ -55,6 +58,7 @@ public class EstacaoService {
                 .map(EstacaoResponse::from);
     }
 
+    @Cacheable(value = "estacoes", key = "#estacaoId")
     public EstacaoResponse consultarPorId(Long id) {
         Optional<Estacao> estacaoCadastrada = estacaoRepository.findById(id);
         if (estacaoCadastrada.isPresent()) {
@@ -63,6 +67,7 @@ public class EstacaoService {
         throw new EstacaoInexistenteException("Estação não encontrada: "+ id);
     }
 
+    @CacheEvict(value = {"linhas", "estacoes"}, allEntries = true)
     public EstacaoResponse atualizar(Long estacaoId, EstacaoRequest request) {
         Optional<Estacao> retornoConsulta = estacaoRepository.findById(estacaoId);
         if (retornoConsulta.isEmpty()) {
@@ -102,6 +107,7 @@ public class EstacaoService {
         return EstacaoResponse.from(estacaoAtualizada);
     }
 
+    @CacheEvict(value = {"linhas", "estacoes"}, allEntries = true)
     public void remover(Long estacaoId) {
         Optional<Estacao> retornoConsulta = estacaoRepository.findById(estacaoId);
         if (retornoConsulta.isEmpty()) {
