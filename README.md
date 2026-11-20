@@ -1,4 +1,4 @@
-# Fluxo — API de Monitoramento de Ocupação
+# Fluxo — API de Monitoramento de Ocupação - [Link do Pitch](https://www.youtube.com/watch?v=DO9kfCzq4UE)
 
 **FIAP \| Análise e Desenvolvimento de Sistemas \| Global Solution
 2026/2 \| Java Advanced**
@@ -51,15 +51,12 @@ JWT, H2, Maven, Swagger/OpenAPI e Postman.
 O banco H2 é executado em memória; os dados são perdidos ao reiniciar a
 aplicação.
 
-### Autenticação para demonstração
+### Usuários de teste por papel
 
-Realize `POST /autenticacao/login` utilizando Basic Auth e utilize o
-token retornado como Bearer Token nas consultas protegidas.
-
-| Usuário  | Senha de demonstração | Perfil   |
-|----------|-----------------------|----------|
-| admin    | 123                   | ADMIN    |
-| operador | 456                   | OPERADOR |
+| Usuário  | Senha | Perfil   | Permissões |
+|----------|-------|----------|------------|
+| admin    | 123   | ADMIN    | Gerenciamento de linhas e estações, registro de ocupações, consultas e monitoramento. |
+| operador | 456   | OPERADOR | Registro de ocupações e consulta de linhas, estações e alertas. |
 
 Credenciais destinadas exclusivamente ao ambiente acadêmico local.
 
@@ -74,6 +71,32 @@ Credenciais destinadas exclusivamente ao ambiente acadêmico local.
 | `/ocupacoes/periodo` | Histórico por período            |
 | `/alertas`           | Consulta de alertas automáticos  |
 | `/actuator/health`   | Monitoramento da aplicação       |
+
+## Diagrama das entidades
+
+<img width="1428" height="707" alt="image" src="https://github.com/user-attachments/assets/26422af2-6fb3-4ab5-82f3-fc4a9f905bcd" />
+
+O relacionamento entre linhas e estações é ManyToMany.
+Cada estação possui um histórico de ocupações e alertas,
+gerados automaticamente conforme sua lotação.
+
+## Justificativa das consultas e do cache
+
+- **Query Methods:** facilitam consultas de ocupações por estação
+  e alertas por nível de risco.
+- **JPQL:** permite consultar o histórico de ocupações por estação
+  e período.
+- **Specification:** possibilita combinar filtros dinâmicos de
+  nome, localização, capacidade e situação das estações.
+- **Paginação e ordenação:** evitam o carregamento excessivo de
+  registros e facilitam a organização dos resultados.
+- **Cache:** reduz consultas repetitivas ao banco de dados nas
+  buscas por ID de linhas e estações, melhorando o desempenho.
+- **CacheEvict:** invalida o cache após cadastros, atualizações
+  e exclusões, evitando o retorno de informações desatualizadas.
+
+As ocupações e os alertas não utilizam cache, pois são informações
+que precisam refletir as medições mais recentes.
 
 ------------------------------------------------------------------------
 
