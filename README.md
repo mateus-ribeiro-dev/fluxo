@@ -19,6 +19,10 @@ de metrô. A solução registra entradas e saídas de passageiros, calcula a
 ocupação das estações e gera alertas automaticamente quando a capacidade
 ultrapassa 85%, auxiliando na gestão do fluxo de pessoas.
 
+
+## Conexão com os ODS da ONU
+O projeto Fluxo está alinhado aos ODS 9 (Indústria, Inovação e Infraestrutura) e 11 (Cidades e Comunidades Sustentáveis), utilizando a tecnologia para monitorar a lotação das estações de metrô, prevenir superlotações e contribuir para uma mobilidade urbana mais segura, eficiente e sustentável.
+
 ## Funcionalidades
 
 - Cadastro, consulta, atualização e exclusão de linhas e estações.
